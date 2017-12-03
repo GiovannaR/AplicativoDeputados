@@ -9,51 +9,62 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class DownloadDados extends AsyncTask<URL, Void, String> {
+public class DownloadDados extends AsyncTask<String, Void, String> {
+    public static final String REQUEST_METHOD = "GET";
+    public static final int READ_TIMEOUT = 15000;
+    public static final int CONNECTION_TIMEOUT = 15000;
+
     @Override
-        protected String doInBackground(URL... params) {
-
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
+    protected String doInBackground(String... params){
+        String stringUrl = params[0];
+        String result;
+        String inputLine;
         try {
-            URL url = new URL("https://dadosabertos.camara.leg.br/swagger/api.html");
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+            //Create a URL object holding our url
+            URL myUrl = new URL(stringUrl);
 
-            InputStream inputStream = urlConnection.getInputStream();
+            //Create a connection
+            HttpURLConnection connection =(HttpURLConnection)
+                    myUrl.openConnection();
 
-            reader = new BufferedReader(new InputStreamReader(inputStream));
+            //Set methods and timeouts
+            connection.setRequestMethod(REQUEST_METHOD);
+            connection.setReadTimeout(READ_TIMEOUT);
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);
 
-            String linha;
-            StringBuffer buffer = new StringBuffer();
-            while((linha = reader.readLine()) != null) {
-                buffer.append(linha);
-                buffer.append("\n");
+            //Connect to our url
+            connection.connect();
+
+            //Create a new InputStreamReader
+            InputStreamReader streamReader = new
+                    InputStreamReader(connection.getInputStream());
+
+            //Create a new buffered reader and String Builder
+            BufferedReader reader = new BufferedReader(streamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            //Check if the line we are reading is not null
+            while((inputLine = reader.readLine()) != null){
+                stringBuilder.append(inputLine);
             }
 
-            return buffer.toString();
-        } catch (Exception e) {
+            //Close our InputStream and Buffered reader
+            reader.close();
+            streamReader.close();
+
+            //Set our result equal to our stringBuilder
+            result = stringBuilder.toString();
+        }
+        catch(IOException e){
             e.printStackTrace();
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            result = null;
         }
 
-        return null;
+        return result;
     }
 
-    @Override
-    protected void onPostExecute(String dados) {
-        // Faça alguma coisa com os dados
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
     }
 }
 

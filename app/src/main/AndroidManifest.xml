@@ -28,7 +28,13 @@
             android:name=".NavigationDrawer.Pastas">
         </activity>
         <activity
+            android:name=".Tela2">
+        </activity>
+        <activity
             android:name=".Tela3">
+        </activity>
+        <activity
+            android:name=".Tela1">
         </activity>
 
     </application>

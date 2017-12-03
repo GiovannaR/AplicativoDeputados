@@ -19,8 +19,13 @@ import android.widget.TextView;
 import com.example.tpfinal.tpfinal.NavigationDrawer.Favoritos;
 import com.example.tpfinal.tpfinal.NavigationDrawer.Pastas;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        TextView test = (TextView) findViewById(R.id.textView2);
+
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,14 +48,7 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        Button btpartido = (Button) findViewById(R.id.button2);
-        btpartido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Tela3.class);
-                startActivity(intent);
-            }
-        });
+
 
         partido();
 
@@ -61,14 +61,40 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        URL url = null;
+        //Some url endpoint that you may have
+        String myUrl = "https://dadosabertos.camara.leg.br/api/v2/deputados?siglaPartido=PT&siglaPartido=PSDB&siglaPartido=DEM&siglaPartido=PP&siglaPartido=PMDB&itens=100&ordenarPor=nome";
+
+        //String to place our result in
+        //public String result = null;
+
+        //Instantiate new instance of our class
+        DownloadDados getRequest = new DownloadDados();
+
+        //Perform the doInBackground method, passing in our url
         try {
-            url = new URL("http://dadosabertos.camara.leg.br/swagger/api.html");
-        } catch (MalformedURLException e) {
+            final String result = getRequest.execute(myUrl).get();
+            //test.setText(result);
+            Button btpartido = (Button) findViewById(R.id.button2);
+            btpartido.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, Tela1.class);
+                    Bundle params = new Bundle();
+                    params.putString("json", result);
+
+                    intent.putExtras(params);
+                    startActivity(intent);
+                }
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        new DownloadDados().execute(url);
+
+
+
     }
 
     @Override
@@ -133,8 +159,5 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void partido (){
-
-
-    }
+    public void partido (){}
 }
