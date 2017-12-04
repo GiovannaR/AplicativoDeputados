@@ -10,7 +10,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nome:"
+        android:text="Nome eleitoral:"
         android:textColor="@android:color/background_dark"
         android:textSize="16sp"
         tools:layout_constraintTop_creator="1"
@@ -25,7 +25,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cargo:"
+        android:text="UF:"
         android:textColor="@android:color/background_dark"
         android:textSize="16sp"
         tools:layout_constraintTop_creator="1"
@@ -93,25 +93,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="@+id/cargoID"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView3"
-        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/cargoID" />
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintLeft_toRightOf="@+id/UFID" />
 
     <TextView
-        android:id="@+id/cargoID"
+        android:id="@+id/UFID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         app:layout_constraintRight_toRightOf="@+id/partidoID"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="21dp"
         app:layout_constraintTop_toBottomOf="@+id/nomeID"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/partidoID" />
+        app:layout_constraintLeft_toLeftOf="@+id/partidoID"
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <TextView
         android:id="@+id/partidoID"
@@ -119,21 +121,32 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="19dp"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/estAtualID"
         android:layout_marginTop="21dp"
-        app:layout_constraintTop_toBottomOf="@+id/cargoID"
+        app:layout_constraintTop_toBottomOf="@+id/UFID"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/textView6" />
+        app:layout_constraintLeft_toLeftOf="@+id/estAtualID" />
 
     <TextView
-        android:id="@+id/estAtual"
+        android:id="@+id/estAtualID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_marginStart="44dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView7"
-        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/partidoID"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/partidoID" />
+        app:layout_constraintLeft_toRightOf="@+id/Despesas" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star" />
 
 </android.support.constraint.ConstraintLayout>

@@ -28,8 +28,9 @@ public class Tela1 extends AppCompatActivity {
 
     ArrayAdapter<String> adapter;
     ArrayList<String> itemList;
-    Bundle params;
+    Bundle parametro;
     ListView listview;
+    String [] uri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,11 +45,7 @@ public class Tela1 extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.listview);
         listview.setAdapter(adapter);
 
-        /*Intent intent = getIntent();
-        if (intent != null) {
-            Bundle params = intent.getExtras();
-            subject = params.getString("subject");
-        }*/
+
 
         Intent intent = getIntent();
 
@@ -56,6 +53,19 @@ public class Tela1 extends AppCompatActivity {
         String json = params.getString("json");
 
         parseJson(json);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //params.putString("uri" + i , uri[i]);
+                Intent intent = new Intent(Tela1.this, Tela2.class);
+                    parametro = new Bundle();
+                    parametro.putString("uri", uri[i]);
+                    intent.putExtras(parametro);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -66,57 +76,19 @@ public class Tela1 extends AppCompatActivity {
 
             JSONObject jsonObj = new JSONObject(json);
             JSONArray array = jsonObj.getJSONArray("dados");
-            final String [] uri = new String[json.length()];
+            uri = new String[json.length()];
 
-            itemList.add("" + json.length());
-            adapter.notifyDataSetChanged();
-
-            for(int i = 0; i < json.length(); i++){
+            for(int i = 0; i < json.length(); i++) {
                 objArray = array.getJSONObject(i);
                 itemList.add(objArray.getString("nome"));
                 uri[i] = objArray.getString("uri");
                 adapter.notifyDataSetChanged();
 
-                //params = new Bundle();
-
-                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //params.putString("uri" + i , uri[i]);
-                        Intent intent = new Intent(getApplicationContext(), Tela2.class);
-                        startActivity(intent);
-                    }
-                });
             }
 
-            //("" + json.length());
-
-            //JSONObject objArray = array.getJSONObject(0);
-            //JSONObject obj = objArray.getJSONObject("Partido_");
-
-            //siglaUfView = (TextView) findViewById(R.id.estAtual);
-            //nomeView.setText(json);
-            //siglaPartidoView.setText(d.getSiglaPartido());
-            //siglaUfView.setText(d.getSiglaUF());
-            //siglaLegislaturaView.setText(d.getIdLegislatura());
-            //itemList.add(objArray.getString("nome"));
-            //adapter.notifyDataSetChanged();
-
-
-
-            //nomeView.setText(objArray.getString("siglaUf"));
-            //siglaPartidoView.setText(objArray.getString("siglaUf"));
-            //siglaUfView.setText(d.getSiglaUF());
         }catch (JSONException e){
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
 
 }
