@@ -30,30 +30,31 @@ public class Favoritos extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> itemList;
     Bundle parametro = new Bundle();
-    String [] array = new String[] ;
+    String [] uri = new String[400];
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.favoritos_layout);
 
-        String[] menuitem = {"github.com/GiovannaR"};
+        //String[] menuitem = {"github.com/GiovannaR"};
 
-        itemList = new ArrayList<String>(Arrays.asList(menuitem));
+        itemList = new ArrayList<String>();
         adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.lblListItem, itemList);
         final ListView listview = (ListView) findViewById(R.id.lvw);
         listview.setAdapter(adapter);
 
         //deleteFile();
-        //update();
+        update();
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                 //Intent intent = new Intent(Favoritos.this, Tela2.class);
-                //intent.putExtras(parametro);
-                //startActivity(intent);
+                Intent intent = new Intent(Favoritos.this, Tela2.class);
+                parametro.putString("uri", uri[i]);
+                intent.putExtras(parametro);
+                startActivity(intent);
             }
         });
 
@@ -71,11 +72,12 @@ public class Favoritos extends AppCompatActivity {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("favoritos.txt")));
                 lineFromFile = reader.readLine();
                 while (lineFromFile != null) {
-                    i++;
                     String [] array = lineFromFile.split("!");
                     itemList.add(array[0]);
                     adapter.notifyDataSetChanged();
-                    parametro.putString("uri" + i, array[1]);
+                    uri[i] = array[1];
+                    i++;
+                    //parametro.putString("uri" + i, array[1]);
                     lineFromFile = reader.readLine();
                 }
             } catch (Exception e) {

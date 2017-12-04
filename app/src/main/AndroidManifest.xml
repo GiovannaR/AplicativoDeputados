@@ -25,9 +25,6 @@
             android:name=".NavigationDrawer.Favoritos">
         </activity>
         <activity
-            android:name=".NavigationDrawer.Pastas">
-        </activity>
-        <activity
             android:name=".Tela2">
         </activity>
         <activity

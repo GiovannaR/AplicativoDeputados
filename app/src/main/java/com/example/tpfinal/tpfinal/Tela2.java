@@ -27,6 +27,8 @@ public class Tela2 extends AppCompatActivity {
     TextView siglaPartidoView;
     TextView siglaUfView;
     TextView siglaEstAtualView;
+    TextView emailView;
+    TextView telefoneView;
     String saved;
 
     @Override
@@ -38,21 +40,22 @@ public class Tela2 extends AppCompatActivity {
             siglaPartidoView = (TextView) findViewById(R.id.partidoID);
             siglaEstAtualView = (TextView) findViewById(R.id.estAtualID);
             siglaUfView = (TextView) findViewById(R.id.UFID);
+            emailView = (TextView) findViewById(R.id.emailID);
+            telefoneView = (TextView) findViewById(R.id.telefoneID);
 
             //Parte dedicada a preencher a pagina
             Intent intent = getIntent();
             Bundle params = intent.getExtras();
             DownloadDados getRequest = new DownloadDados();
             String myUrl = params.getString("uri");
-            final String result = getRequest.execute(myUrl).get();
+            final String result;
+            result = getRequest.execute(myUrl).get();
             saved = parseJson(result);
-            nomeView.setText(saved);
 
             //Parte dedicada aos favoritos
             ImageButton btnFavorito = (ImageButton) findViewById(R.id.imageButton);
 
             btnFavorito.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View view) {
                     adicionarArquivo(saved);
@@ -60,10 +63,9 @@ public class Tela2 extends AppCompatActivity {
             });
 
 
-
-
-
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -73,6 +75,7 @@ public class Tela2 extends AppCompatActivity {
     private String parseJson (String json) {
         JSONObject objArray;
         JSONObject ultimoStatus;
+        JSONObject gabinete;
         try{
 
             JSONObject jsonObj = new JSONObject(json);
@@ -84,12 +87,16 @@ public class Tela2 extends AppCompatActivity {
                 siglaPartidoView.setText(ultimoStatus.getString("siglaPartido"));
                 siglaEstAtualView.setText(ultimoStatus.getString("situacao"));
                 siglaUfView.setText(ultimoStatus.getString("siglaUf"));
-                // + "#" + ultimoStatus.getString("uri"))
+
+                gabinete = ultimoStatus.getJSONObject("gabinete");
+
+                emailView.setText(gabinete.getString("email"));
+                telefoneView.setText(gabinete.getString("telefone"));
+
             return (ultimoStatus.getString("nomeEleitoral") + "!" + ultimoStatus.getString("uri"));
 
         }catch (JSONException e){
             e.printStackTrace();
-            nomeView.setText(e.getMessage());
             return null;
         }
     }
