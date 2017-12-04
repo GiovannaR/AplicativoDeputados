@@ -1,11 +1,15 @@
 package com.example.tpfinal.tpfinal;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -29,6 +36,7 @@ public class Tela2 extends AppCompatActivity {
     TextView siglaEstAtualView;
     TextView emailView;
     TextView telefoneView;
+    ImageView foto;
     String saved;
 
     @Override
@@ -42,6 +50,8 @@ public class Tela2 extends AppCompatActivity {
             siglaUfView = (TextView) findViewById(R.id.UFID);
             emailView = (TextView) findViewById(R.id.emailID);
             telefoneView = (TextView) findViewById(R.id.telefoneID);
+            foto = (ImageView)findViewById(R.id.imageView2);
+
 
             //Parte dedicada a preencher a pagina
             Intent intent = getIntent();
@@ -88,6 +98,10 @@ public class Tela2 extends AppCompatActivity {
                 siglaEstAtualView.setText(ultimoStatus.getString("situacao"));
                 siglaUfView.setText(ultimoStatus.getString("siglaUf"));
 
+                Bitmap deputado = new Imagem().execute(ultimoStatus.getString("urlFoto")).get();
+
+                foto.setImageBitmap(deputado);
+
                 gabinete = ultimoStatus.getJSONObject("gabinete");
 
                 emailView.setText(gabinete.getString("email"));
@@ -96,6 +110,12 @@ public class Tela2 extends AppCompatActivity {
             return (ultimoStatus.getString("nomeEleitoral") + "!" + ultimoStatus.getString("uri"));
 
         }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ExecutionException e) {
             e.printStackTrace();
             return null;
         }
@@ -117,6 +137,8 @@ public class Tela2 extends AppCompatActivity {
         }
 
     }
+
+
 
 
 }
