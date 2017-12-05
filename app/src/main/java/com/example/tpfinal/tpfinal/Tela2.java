@@ -1,8 +1,13 @@
 package com.example.tpfinal.tpfinal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +44,9 @@ public class Tela2 extends AppCompatActivity {
     ImageView foto;
     String saved;
 
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -51,6 +59,32 @@ public class Tela2 extends AppCompatActivity {
             emailView = (TextView) findViewById(R.id.emailID);
             telefoneView = (TextView) findViewById(R.id.telefoneID);
             foto = (ImageView)findViewById(R.id.imageView2);
+
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+            // Create a listener
+            SensorEventListener mSensorListener = new SensorEventListener() {
+                @Override
+                public void onSensorChanged(SensorEvent sensorEvent) {
+                    if(sensorEvent.values[2] > 0.5f) { // anticlockwise
+                        Intent intent = new Intent(Tela2.this, MainActivity.class);
+                        startActivity(intent);
+                    } else if(sensorEvent.values[2] < -0.5f) { // clockwise
+                        Intent intent = new Intent(Tela2.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int i) {
+                }
+            };
+
+// Register the listener
+            mSensorManager.registerListener(mSensorListener,
+                    mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
 
 
             //Parte dedicada a preencher a pagina
@@ -137,6 +171,12 @@ public class Tela2 extends AppCompatActivity {
         }
 
     }
+
+    public void somethingWrong (){
+
+    }
+
+
 
 
 
